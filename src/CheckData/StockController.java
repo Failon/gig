@@ -1,5 +1,8 @@
 package CheckData;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -90,14 +93,34 @@ public class StockController {
 	public static Queue<Sale> RevBudgets (ArrayList<Sale> sale){
 		
 		Queue<Sale> Lista = new LinkedList<Sale>(); //Declaro la nueva lista de facturas de venta que revisar si son posibles presupuestos.
-		Date fecha_actual = new Date(); //Guardo la fecha actual.
-		for(int cont=0;cont<sale.size();cont++){
-			Sale venta_aux = sale.get(cont); //voy it
+		Date fecha = new Date(); //Guardo la fecha actual.
+		SimpleDateFormat mydateformat = new SimpleDateFormat("dd/MM/yyyy");//defino el formato de fecha
+		String fecha_actual = mydateformat.format(fecha); //saco el string del formato de fecha definido anteriormente para la fecha actual
+		Comparator<Sale> BudgetExpire = new Comparator<Sale>(){ //me creo un comparador que compare cronológicamente las Sales. 
+			public int compare(Sale sale1, Sale sale2) { //defino lo que devolverá el metodo compare.
+				
+				return sale1.getDataOpen().compareTo(sale2.getDataOpen());
+			}
 			
-			//!!! la cola tiene que estar ordenada por fecha!
-			
+		};
+		
+		Collections.sort(sale, BudgetExpire); //ordeno el ArrayList de Sales pasado por parametro segun el comparador cronologico.
+		
+		for(int cont = 0; cont<sale.size();cont++){
+			if(sale.get(cont).getBudget()){//si es un presupuesto
+				String fecha_lista = mydateformat.format(sale.get(cont).getDataOpen());//convierto al formato deseado la fecha de apertura de la sale actual.
+				if(Checking.DifData(fecha_actual, fecha_lista)<=15){ //si la diferencia de dias entre la fecha de apertura y la fecha actual es menor o igual a 15.
+					Lista.offer(sale.get(cont)); //añado la venta a la cola
+				}
+			}
 		}
 		
 		
+		return Lista;
+		
 	}
+	
+	
+
+
 }

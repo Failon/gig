@@ -4,6 +4,7 @@
  */
 package Operations;
 import Colectives.Interns.Employee;
+
 import java.util.Date;
 /**
  *
@@ -66,7 +67,8 @@ public class Operation{
     public void setDataClose(Date dataClose) {
         this.dataClose = dataClose;
     }
-    
-    
+
+  
+ 
      
 }
