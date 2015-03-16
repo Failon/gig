@@ -9,11 +9,9 @@ package gig;
  *
  * @author m3daw
  */
-import GraficInterface.*;
 import Operations.*;
 import CheckData.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 public class Gig {
 
