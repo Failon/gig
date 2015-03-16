@@ -4,6 +4,7 @@
  */
 package Colectives.Interns;
 import java.util.Date; //para que funcionen los datos
+
 import Colectives.Person;
 
 /**
@@ -16,17 +17,24 @@ public class Employee extends Person{
     protected String department, contract, role, numberSS;
     protected float salary;
 
-    public Employee(int employeeCode, String department, String contract, String role, String numberSS, float salary, String name, String email) {
-        super(name, email);
-        this.employeeCode = employeeCode;
-        this.department = department;
-        this.contract = contract;
-        this.role = role;
-        this.numberSS = numberSS;
-        this.salary = salary;
-    }
+    
 
-    public Employee() {
+    public Employee(String name, String code, String address,
+			String postalcode, String city, String country, String email,
+			String type, String bancCode, String phone, String comments,
+			Date entryDate, Date outDate, int employeeCode, String department,
+			String contract, String role, String numberSS, float salary) {
+		super(name, code, address, postalcode, city, country, email, type,
+				bancCode, phone, comments, entryDate, outDate);
+		this.employeeCode = employeeCode;
+		this.department = department;
+		this.contract = contract;
+		this.role = role;
+		this.numberSS = numberSS;
+		this.salary = salary;
+	}
+
+	public Employee() {
     }
 
     public int getEmployeeCode() {

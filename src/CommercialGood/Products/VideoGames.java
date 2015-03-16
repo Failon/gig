@@ -4,7 +4,6 @@
  */
 package CommercialGood.Products;
 
-import java.util.Date;
 
 /**
  *

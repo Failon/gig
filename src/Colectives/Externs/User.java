@@ -16,11 +16,26 @@ public class User {
     //la forma de representarlos son con objetos de una clase
     //auxiliar y especifica, donde aparece ranking, 
 
-    public String getNick() {
+    public User(String nick, String email, String password, String[] hits,
+			int credits, int[] gamescode, int[] levelgame) {
+		this.nick = nick;
+		this.email = email;
+		this.password = password;
+		this.hits = hits;
+		this.credits = credits;
+		this.gamescode = gamescode;
+		this.levelgame = levelgame;
+	}
+    
+    public User() {
+    	
+	}
+
+	public String getNick() {
         return nick;
     }
 
-    public void setNick(String nick) {
+	public void setNick(String nick) {
         this.nick = nick;
     }
 
