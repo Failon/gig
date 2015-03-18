@@ -1,36 +1,106 @@
 package IODades.File;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import IODades.DataSource;
 
 public class DataFile implements DataSource {
 	
-	protected ObjectAddOutputStream fileOut;
+	protected ObjectAddOutputStream fileOutCat;
+	protected ObjectOutputStream fileOutOverride;
 	protected ObjectInputStream fileIn;
 	
 	@Override
-	public int open(String source, boolean mode) {
+	public int open(String source, int mode) {
 		int error;
 		try {
-			fileOut = new ObjectAddOutputStream(new FileOutputStream(source,mode));
-			error = 0;
+			switch(mode){
+			case 0: //para leer
+				fileIn = new ObjectInputStream(new FileInputStream(source));
+				error = 0;
+			break;
+			case 1: //para escribir sobreescribiedo.
+				fileOutCat = new ObjectAddOutputStream(new FileOutputStream(source, true));
+				error = 0;
+			break;
+			case 2:
+				fileOutOverride = new ObjectOutputStream(new FileOutputStream(source));
+				error = 0;
+			break;
+			default:
+				error = -5;
+			break;
+			}
+			
 		} catch(FileNotFoundException ex) {
-			error = -3;
+			error = -1;
 		} catch(IOException ex){
-			error = -2;
+			error = -666;
 		}
 		return error;
 	}
 
 	@Override
 	public int close(String source) {
-		// TODO Auto-generated method stub
-		return 0;
+		int error;
+	
+		switch(source){
+		case "in":
+			if(fileIn!=null){	     
+	            try {            	                
+	               fileIn.close();
+	               error = 0;
+	            }catch (FileNotFoundException ex) {
+	                error = -1;     
+	            } catch (IOException ex) {
+	               error=-666;
+	            }				
+			}
+			else {
+				error = -1;
+			}
+		break;
+		case "cat":
+			if(fileOutCat!=null){	     
+	            try {            	                
+	               fileOutCat.close();
+	               error = 0;
+	            }catch (FileNotFoundException ex) {
+	                error = -1;     
+	            } catch (IOException ex) {
+	               error=-666;
+	            }				
+			}
+			else {
+				error = -1;
+			}
+		break;
+		case "ovr":
+			if(fileOutOverride!=null){
+				try{
+					fileOutOverride.close();
+					error = 0;
+				}catch (FileNotFoundException ex){
+					error = -1;
+				}catch (IOException ex) {
+					error = -666;
+				}
+			}
+			else {
+				error = -1;
+			}
+		break;
+		default:
+			error = -5;
+		break;
+		}	
+		return error;
 	}
 
 	@Override
