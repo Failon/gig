@@ -1,9 +1,6 @@
 package IODades.File;
 
-<<<<<<< HEAD
 import java.io.EOFException;
-=======
->>>>>>> origin/master
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,11 +18,7 @@ public class DataFile implements DataSource {
 	protected ObjectInputStream fileIn;
 	
 	@Override
-<<<<<<< HEAD
 	public int open(String source, int mode) { //para abrir archivos.
-=======
-	public int open(String source, int mode) {
->>>>>>> origin/master
 		int error;
 		try {
 			switch(mode){
@@ -33,7 +26,6 @@ public class DataFile implements DataSource {
 				fileIn = new ObjectInputStream(new FileInputStream(source));
 				error = 0;
 			break;
-<<<<<<< HEAD
 			case 1: //para escribir a continuacion.
 				fileOutCat = new ObjectAddOutputStream(new FileOutputStream(source, true));
 				error = 0;
@@ -43,17 +35,6 @@ public class DataFile implements DataSource {
 				error = 0;
 			break;
 			default: //cualquier metodo no soportado provocara un error de parametro incorrecto.
-=======
-			case 1: //para escribir sobreescribiedo.
-				fileOutCat = new ObjectAddOutputStream(new FileOutputStream(source, true));
-				error = 0;
-			break;
-			case 2:
-				fileOutOverride = new ObjectOutputStream(new FileOutputStream(source));
-				error = 0;
-			break;
-			default:
->>>>>>> origin/master
 				error = -5;
 			break;
 			}
@@ -67,19 +48,11 @@ public class DataFile implements DataSource {
 	}
 
 	@Override
-<<<<<<< HEAD
 	public int close(String source) { //para cerrar ficheros.
 		int error;
 	
 		switch(source){
 		case "in": //cerrar ficheros de tipo lectura
-=======
-	public int close(String source) {
-		int error;
-	
-		switch(source){
-		case "in":
->>>>>>> origin/master
 			if(fileIn!=null){	     
 	            try {            	                
 	               fileIn.close();
@@ -91,17 +64,10 @@ public class DataFile implements DataSource {
 	            }				
 			}
 			else {
-<<<<<<< HEAD
 				error = -1; //si el fichero está a null, es que mo si no existiera por tanto lanzamos -1 de FileNotFoundException.
 			}
 		break;
 		case "cat": //para cerrar ficheros de añadido.
-=======
-				error = -1;
-			}
-		break;
-		case "cat":
->>>>>>> origin/master
 			if(fileOutCat!=null){	     
 	            try {            	                
 	               fileOutCat.close();
@@ -116,11 +82,7 @@ public class DataFile implements DataSource {
 				error = -1;
 			}
 		break;
-<<<<<<< HEAD
 		case "ovr": //para cerrar objetos sobreescritos.
-=======
-		case "ovr":
->>>>>>> origin/master
 			if(fileOutOverride!=null){
 				try{
 					fileOutOverride.close();
@@ -135,11 +97,7 @@ public class DataFile implements DataSource {
 				error = -1;
 			}
 		break;
-<<<<<<< HEAD
 		default: //cualquier otro parametro no está soportado y lanza un error de parametro incorrecto.
-=======
-		default:
->>>>>>> origin/master
 			error = -5;
 		break;
 		}	
