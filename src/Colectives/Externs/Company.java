@@ -155,4 +155,13 @@ public class Company extends Person implements StakeHolder {
     public void setDiscount(float discount) {
         this.discount = discount;
     }
+
+	public String getDelivAddress() {
+		return delivAddress;
+	}
+
+	public void setDelivAddress(String delivAddress) {
+		this.delivAddress = delivAddress;
+	}
+    
 }
