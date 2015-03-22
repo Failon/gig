@@ -163,5 +163,30 @@ public class Company extends Person implements StakeHolder {
 	public void setDelivAddress(String delivAddress) {
 		this.delivAddress = delivAddress;
 	}
+
+
+	@Override
+	public String getPostalCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPostalCode(String code) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getdelivcountry() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setdelivcountry(String code) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }

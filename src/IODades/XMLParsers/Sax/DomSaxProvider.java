@@ -1,4 +1,4 @@
-package IODades.File.XMLParsers.Sax;
+package IODades.XMLParsers.Sax;
 
 import java.io.File;
 import java.util.ArrayList;

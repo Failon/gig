@@ -1,4 +1,4 @@
-package IODades.File.XMLParsers.Sax;
+package IODades.XMLParsers.Sax;
 
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.Attributes;

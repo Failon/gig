@@ -85,6 +85,37 @@ public class Customer extends Person implements StakeHolder {
 			this.birthDate = birthDate;
 		}	
 		
+	}
+
+	@Override
+	public String getPostalCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setPostalCode(String code) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String getdelivcountry() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setdelivcountry(String code) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String getCorpName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setCorpName(String cname) {
+		// TODO Auto-generated method stub
+		
 	}  
    
 }
