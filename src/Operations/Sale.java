@@ -10,11 +10,13 @@ import Operations.Details.BillDetail;
 import java.util.ArrayList;
 import java.util.Date;
 
-
+import javax.xml.bind.annotation.XmlElement; // imports especifics de JAXB
+import javax.xml.bind.annotation.XmlType;
 /**
  *
  * @author devweb
  */
+@XmlType(propOrder = { "cliente", "codigoVenta", "tipoVenta", "lineasDetalle"})
 public class Sale extends Bill implements Billable {
     protected StakeHolder client;
     protected int SaleIdCode;
@@ -30,7 +32,7 @@ public class Sale extends Bill implements Billable {
         this.SaleIdCode = SaleIdCode;
         this.typeSale = typeSale;
     }
-    
+    @XmlElement(name = "cliente") 
     public StakeHolder getClient() {
         return client;
     }
@@ -38,15 +40,15 @@ public class Sale extends Bill implements Billable {
     public void setClient(StakeHolder client) {
         this.client = client;
     }
-
+    @XmlElement(name = "codigoVenta") 
     public int getSaleIdCode() {
         return SaleIdCode;
     }
-
+    
     public void setSaleIdCode(int SaleIdCode) {
         this.SaleIdCode = SaleIdCode;
     }
-
+    @XmlElement(name = "tipoVenta") 
     public String getTypeSale() {
         return typeSale;
     }
@@ -54,7 +56,7 @@ public class Sale extends Bill implements Billable {
     public void setTypeSale(String typeSale) {
         this.typeSale = typeSale;
     }
-
+    @XmlElement(name = "lineasDetalle") 
     public ArrayList<BillDetail> getResources() {
         return resources;
     }

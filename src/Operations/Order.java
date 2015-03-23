@@ -11,17 +11,21 @@ import Operations.Details.DetailsOrders;
 
 import java.util.ArrayList;
 import java.util.Date;
+import javax.xml.bind.annotation.XmlElement; // imports especifics de JAXB
+import javax.xml.bind.annotation.XmlType;
+
 /**
  *
  * @author devweb
  */
+@XmlType(propOrder = { "proveedor", "estado", "idPedido", "empleadoReceptor", "lineasDetalle"})
 public class Order extends Bill implements Billable{
         protected Provider provider;
         protected int status; //indica si el pedido s'ha satisfet
         protected int OrderIdCode;
         protected Employee EmpReceiver;
         protected ArrayList<DetailsOrders> resources;
-
+    @XmlElement(name = "proveedor") 
     public Provider getProvider() {
         return provider;
     }
@@ -29,7 +33,7 @@ public class Order extends Bill implements Billable{
     public void setProvider(Provider provider) {
         this.provider = provider;
     }
-
+    @XmlElement(name = "empleadoReceptor") 
     public Employee getEmpReceiver() {
         return EmpReceiver;
     }
@@ -37,7 +41,7 @@ public class Order extends Bill implements Billable{
     public void setEmpReceiver(Employee EmpReceiver) {
         this.EmpReceiver = EmpReceiver;
     }
-
+    @XmlElement(name = "lineasDetalle") 
     public ArrayList<DetailsOrders> getResources() {
         return resources;
     }
@@ -45,8 +49,24 @@ public class Order extends Bill implements Billable{
     public void setResources(ArrayList<DetailsOrders> resources) {
         this.resources = resources;
     }
+    @XmlElement(name = "estado") 
+    public int getStatus() {
+		return status;
+	}
 
-    public Order() {
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	@XmlElement(name = "idPedido") 
+	public int getOrderIdCode() {
+		return OrderIdCode;
+	}
+
+	public void setOrderIdCode(int orderIdCode) {
+		OrderIdCode = orderIdCode;
+	}
+
+	public Order() {
     }
 
     public Order(Provider provider, int status, int OrderIdCode, Employee EmpReceiver, Date dataPayment, Float discount, Float taxes, double totalPrice, String payConditions, Boolean budget, int code, int type, Employee EmployeeGen, Date dataOpen, Date dataClose) {

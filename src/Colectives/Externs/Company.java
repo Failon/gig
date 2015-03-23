@@ -9,10 +9,13 @@ import java.util.Date;
 import Colectives.Person;
 import Colectives.StakeHolder;
 
+import javax.xml.bind.annotation.XmlElement; // imports especifics de JAXB
+import javax.xml.bind.annotation.XmlType;
 /**
  *
  * @author devweb
  */
+@XmlType(propOrder = { "fax", "sitioWeb", "CUIT", "nombreCorporativo", "contactos", "telefonosAdicionales", "datosCobro", "direccionEntrega", "codigoPostalEntrega", "ciudadEntrega", "paisEntrega", "codigoEmpresa", "descuento"})
 public class Company extends Person implements StakeHolder {
     
     protected String fax, website, CUIT, CorporateName, contacts[],
@@ -51,15 +54,7 @@ public class Company extends Person implements StakeHolder {
 
 
 
-	public String getCorpName(){
-        return CorporateName;
-    }
-    
-    public void setCorpName(String cname){
-        CorporateName=cname;
-    }
-    
-
+    @XmlElement(name = "fax")
     public String getFax() {
         return fax;
     }
@@ -67,7 +62,7 @@ public class Company extends Person implements StakeHolder {
     public void setFax(String fax) {
         this.fax = fax;
     }
-
+    @XmlElement(name = "sitioWeb")
     public String getWebsite() {
         return website;
     }
@@ -75,7 +70,7 @@ public class Company extends Person implements StakeHolder {
     public void setWebsite(String website) {
         this.website = website;
     }
-
+    @XmlElement(name = "CUIT")
     public String getCUIT() {
         return CUIT;
     }
@@ -83,7 +78,7 @@ public class Company extends Person implements StakeHolder {
     public void setCUIT(String CUIT) {
         this.CUIT = CUIT;
     }
-
+    @XmlElement(name = "nombreCorporativo")
     public String getCorporateName() {
         return CorporateName;
     }
@@ -91,7 +86,7 @@ public class Company extends Person implements StakeHolder {
     public void setCorporateName(String CorporateName) {
         this.CorporateName = CorporateName;
     }
-
+    @XmlElement(name = "contactos")
     public String[] getContacts() {
         return contacts;
     }
@@ -99,7 +94,7 @@ public class Company extends Person implements StakeHolder {
     public void setContacts(String[] contacts) {
         this.contacts = contacts;
     }
-
+    @XmlElement(name = "telefonosAdicionales")
     public String[] getAdditionalsPhones() {
         return additionalsPhones;
     }
@@ -107,7 +102,7 @@ public class Company extends Person implements StakeHolder {
     public void setAdditionalsPhones(String[] additionalsPhones) {
         this.additionalsPhones = additionalsPhones;
     }
-
+    @XmlElement(name = "datosCobro")
     public String[] getBillingInfo() {
         return billingInfo;
     }
@@ -115,15 +110,15 @@ public class Company extends Person implements StakeHolder {
     public void setBillingInfo(String[] billingInfo) {
         this.billingInfo = billingInfo;
     }
-
+    @XmlElement(name = "codigoPostalEntrega")
     public String getDelivPostalcode() {
         return delivPostalcode;
     }
-
+  
     public void setDelivPostalcode(String delivPostalcode) {
         this.delivPostalcode = delivPostalcode;
     }
-
+    @XmlElement(name = "ciudadEntrega")
     public String getDelivCity() {
         return delivCity;
     }
@@ -131,7 +126,7 @@ public class Company extends Person implements StakeHolder {
     public void setDelivCity(String delivCity) {
         this.delivCity = delivCity;
     }
-
+    @XmlElement(name = "paisEntrega")
     public String getDelivCountry() {
         return delivCountry;
     }
@@ -139,7 +134,7 @@ public class Company extends Person implements StakeHolder {
     public void setDelivCountry(String delivCountry) {
         this.delivCountry = delivCountry;
     }
-
+    @XmlElement(name = "codigoEmpresa")
     public int getCompanyCode() {
         return CompanyCode;
     }
@@ -147,7 +142,7 @@ public class Company extends Person implements StakeHolder {
     public void setCompanyCode(int CompanyCode) {
         this.CompanyCode = CompanyCode;
     }
-
+    @XmlElement(name = "descuento")
     public float getDiscount() {
         return discount;
     }
@@ -155,7 +150,7 @@ public class Company extends Person implements StakeHolder {
     public void setDiscount(float discount) {
         this.discount = discount;
     }
-
+    @XmlElement(name = "direccionEntrega")
 	public String getDelivAddress() {
 		return delivAddress;
 	}
@@ -185,6 +180,18 @@ public class Company extends Person implements StakeHolder {
 
 	@Override
 	public void setdelivcountry(String code) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getCorpName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setCorpName(String cname) {
 		// TODO Auto-generated method stub
 		
 	}

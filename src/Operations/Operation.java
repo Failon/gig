@@ -6,10 +6,14 @@ package Operations;
 import Colectives.Interns.Employee;
 
 import java.util.Date;
+import javax.xml.bind.annotation.XmlElement; // imports especifics de JAXB
+import javax.xml.bind.annotation.XmlType;
+
 /**
  *
  * @author devweb
  */
+@XmlType(propOrder = { "codigo", "tipo", "empleado"})
 public class Operation{
     
     protected int code;
@@ -27,7 +31,7 @@ public class Operation{
 
     public Operation() {
     }
-
+    @XmlElement(name = "codigo") 
     public int getCode() {
         return code;
     }
@@ -35,7 +39,7 @@ public class Operation{
     public void setCode(int code) {
         this.code = code;
     }
-
+    @XmlElement(name = "tipo") 
     public int getType() {
         return type;
     }
@@ -43,7 +47,7 @@ public class Operation{
     public void setType(int type) {
         this.type = type;
     }
-
+    @XmlElement(name = "empleado") 
     public Employee getEmployeeGen() {
         return EmployeeGen;
     }

@@ -6,11 +6,14 @@ package Operations;
 
 import Colectives.Interns.Employee;
 import java.util.Date;
+import javax.xml.bind.annotation.XmlElement; // imports especifics de JAXB
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author devweb
  */
+@XmlType(propOrder = { "fechaPago", "descuento", "impuestos", "precioTotal", "condicionesDePago"})
 public class Bill extends Operation {
     
             protected Date dataPayment;
@@ -31,15 +34,15 @@ public class Bill extends Operation {
         this.payConditions = payConditions;
         this.budget = budget;
     }
-
+    @XmlElement(name = "fechaPago") 
     public Date getDataPayment() {
         return dataPayment;
     }
-
+    
     public void setDataPayment(Date dataPayment) {
         this.dataPayment = dataPayment;
     }
-
+    @XmlElement(name = "descuento") 
     public Float getDiscount() {
         return discount;
     }
@@ -47,7 +50,7 @@ public class Bill extends Operation {
     public void setDiscount(Float discount) {
         this.discount = discount;
     }
-
+    @XmlElement(name = "impuestos") 
     public Float getTaxes() {
         return taxes;
     }
@@ -55,7 +58,7 @@ public class Bill extends Operation {
     public void setTaxes(Float taxes) {
         this.taxes = taxes;
     }
-
+    @XmlElement(name = "precioTotal") 
     public double getTotalPrice() {
         return totalPrice;
     }
@@ -63,7 +66,7 @@ public class Bill extends Operation {
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
-
+    @XmlElement(name = "condicionesDePago") 
     public String getPayConditions() {
         return payConditions;
     }

@@ -6,11 +6,13 @@ package Colectives.Interns;
 import java.util.Date; //para que funcionen los datos
 
 import Colectives.Person;
-
+import javax.xml.bind.annotation.XmlElement; // imports especifics de JAXB
+import javax.xml.bind.annotation.XmlType;
 /**
  *
  * @author devweb
  */
+@XmlType(propOrder = { "codigoEmpleado", "departamento", "contrato", "rol", "numeroSS", "sueldo"})
 public class Employee extends Person{
     
     int employeeCode;
@@ -33,10 +35,10 @@ public class Employee extends Person{
 		this.numberSS = numberSS;
 		this.salary = salary;
 	}
-
+    
 	public Employee() {
     }
-
+	@XmlElement(name = "codigoEmpleado") 
     public int getEmployeeCode() {
         return employeeCode;
     }
@@ -44,7 +46,7 @@ public class Employee extends Person{
     public void setEmployeeCode(int employeeCode) {
         this.employeeCode = employeeCode;
     }
-
+    @XmlElement(name = "departamento") 
     public String getDepartment() {
         return department;
     }
@@ -52,7 +54,7 @@ public class Employee extends Person{
     public void setDepartment(String department) {
         this.department = department;
     }
-
+    @XmlElement(name = "contrato") 
     public String getContract() {
         return contract;
     }
@@ -60,15 +62,15 @@ public class Employee extends Person{
     public void setContract(String contract) {
         this.contract = contract;
     }
-
+    @XmlElement(name = "rol") 
     public String getRole() {
         return role;
     }
-
+    
     public void setRole(String role) {
         this.role = role;
     }
-
+    @XmlElement(name = "numeroSS") 
     public String getNumberSS() {
         return numberSS;
     }
@@ -76,7 +78,7 @@ public class Employee extends Person{
     public void setNumberSS(String numberSS) {
         this.numberSS = numberSS;
     }
-
+    @XmlElement(name = "sueldo") 
     public float getSalary() {
         return salary;
     }

@@ -5,7 +5,8 @@
 package Colectives.Externs;
 
 import java.util.Date;
-
+import javax.xml.bind.annotation.XmlElement; // imports especifics de JAXB
+import javax.xml.bind.annotation.XmlType;
 //import Colectives.StakeHolder;
 //import GoodAndServices.ComercialGood;
 
@@ -14,6 +15,7 @@ import java.util.Date;
  *
  * @author devweb
  */
+@XmlType(propOrder = { "tipoProveedor", "tipoRecurso"})
 public class Provider extends Company {
     
     protected int typeProvider;
@@ -41,10 +43,7 @@ public class Provider extends Company {
 		this.typeProvider = typeProvider;
 		this.typeResource = typeResource;
 	}
-
-
-
-
+    @XmlElement(name = "tipoProveedor")
 	public int getTypeProvider() {
         return typeProvider;
     }
@@ -52,7 +51,7 @@ public class Provider extends Company {
 	public void setTypeProvider(int typeProvider) {
         this.typeProvider = typeProvider;
     }
-
+	@XmlElement(name = "tipoRecurso")
     public String getTypeResource() {
         return typeResource;
     }
