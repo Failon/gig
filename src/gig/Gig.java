@@ -5,16 +5,13 @@
  */
 package gig;
 
+import IODades.DB.JDBCAdapters.gigmysql;
+
 /**
  *
  * @author m3daw
  */
-import IODades.File.DataFile;
-import Operations.*;
-import CheckData.*;
-import Colectives.Externs.User;
 
-import java.util.ArrayList;
 public class Gig {
 
     /**
@@ -22,15 +19,37 @@ public class Gig {
      */
     public static void main(String[] args) {
         
-    	DataFile prueba = new DataFile();
-    	int i = 1;
-    	ArrayList<User> usuarios = new ArrayList<User>();
+    	gigmysql prueba = new gigmysql();
     	
-    	User usuario1 = new User();
-    	User usuario2 = new User();
-    	
-    	usuario1.setNick("piter");
-    	usuario1.setEmail("hola@hola.com");
+    	prueba.setHost("localhost");
+    	prueba.setUser("root");
+    	prueba.setPassword("");
+    	prueba.setDatabase("gig");
+    	prueba.setConnect();
+    	String[] campos = {"code", "name", "description"};
+    	String[] values = {"4", "fifa", "juego de futbol"};
+
+    	/*int error = prueba.Select("videogames", campos, "code", "2");
+    	System.out.println(error);
+    	System.out.println("-------");
+    	error = prueba.Insert("videogames", campos, values);
+    	System.out.println(error);
+    	error = prueba.Update("videogames", campos, values, "code", "2");
+    	System.out.println(error);
+    	System.out.println("-------");
+    	int error = prueba.Select("videogames", campos, "code", "4");
+    	System.out.println(error);
+    	System.out.println("-------");*/
+    	int error = prueba.Select("videogames", campos, null , "4");
+    	System.out.println(error);
+    	System.out.println("-------");
+    	/*
+    	error = prueba.Delete("videogames", "code", "4");
+    	System.out.println(error);
+    	System.out.println("-------");
+    	error = prueba.Select("videogames", campos, "code", "4");
+    	System.out.println(error);
+    	System.out.println("-------");*/
     	
     }
     
