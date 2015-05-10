@@ -1,6 +1,7 @@
 package IODades.DB;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -150,8 +151,29 @@ public class jdbc implements DataStore{
 	}
 	@Override
 	public int importdades(ArrayList dades, String source) {
-		// TODO Auto-generated method stub
-		return 0;
+		//extraigo los datos para realizar la consulta
+		String[] datos_consulta = source.split("@");
+		String[] campos = datos_consulta[0].split(";");
+		String tabla = datos_consulta[1];
+		String[] where = datos_consulta[2].split(";");
+		
+		//realizo la consulta
+		int error = Select(tabla, campos, where[0], where[1]);
+		
+		if(error == 0){
+		    ResultSetMetaData meta;
+		    
+			try {
+				meta = resultado.getMetaData();
+				int numColumns = meta.getColumnCount();
+				for(int i = 0; i< numColumns; i++){
+					int type = meta.getColumnType(i);
+				}
+			} catch (SQLException e) {
+				error = -1;
+			}	    		    
+		}
+		return error;
 	}
 	@Override
 	public int exportdades(ArrayList dades, String source, int mode) {

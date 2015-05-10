@@ -9,7 +9,7 @@ public class gigmysql extends jdbc{
 	protected int error = 0;
 	
 	@Override
-	public int open(){
+	public int open(String source, int mode){
 		int error;
 		error = setConnect();
 		return error;
