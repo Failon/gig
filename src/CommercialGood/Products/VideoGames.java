@@ -10,11 +10,11 @@ package CommercialGood.Products;
  * @author devweb
  */
 public class VideoGames extends Game {
-     protected String plataforms[], edition;
+     protected String plataforms, edition;
      protected boolean online;
      protected int PEGI;
 
-    public VideoGames(String[] plataforms, String edition, boolean online, int PEGI) {
+    public VideoGames(String plataforms, String edition, boolean online, int PEGI) {
         this.plataforms = plataforms;
         this.edition = edition;
         this.online = online;
@@ -24,11 +24,11 @@ public class VideoGames extends Game {
     public VideoGames() {
     }
 
-    public String[] getPlataforms() {
+    public String getPlataforms() {
         return plataforms;
     }
 
-    public void setPlataforms(String[] plataforms) {
+    public void setPlataforms(String plataforms) {
         this.plataforms = plataforms;
     }
 

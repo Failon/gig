@@ -5,6 +5,9 @@
  */
 package gig;
 
+import java.util.ArrayList;
+
+import CommercialGood.Products.VideoGames;
 import IODades.DB.JDBCAdapters.gigmysql;
 
 /**
@@ -28,7 +31,13 @@ public class Gig {
     	prueba.setConnect();
     	String[] campos = {"code", "name", "description"};
     	String[] values = {"4", "fifa", "juego de futbol"};
-
+    	ArrayList<VideoGames> VideoArray = new ArrayList<VideoGames>();
+    	VideoGames juego = new VideoGames();
+    	VideoArray.add(juego);
+    	String query = "edition;name@videogames@code;1";
+    	
+    	int error = prueba.importdades(VideoArray, query);
+    	System.out.println(error);
     	/*int error = prueba.Select("videogames", campos, "code", "2");
     	System.out.println(error);
     	System.out.println("-------");
@@ -39,7 +48,7 @@ public class Gig {
     	System.out.println("-------");
     	int error = prueba.Select("videogames", campos, "code", "4");
     	System.out.println(error);
-    	System.out.println("-------");*/
+    	System.out.println("-------");
     	int error = prueba.Select("videogames", campos, null , "4");
     	System.out.println(error);
     	System.out.println("-------");

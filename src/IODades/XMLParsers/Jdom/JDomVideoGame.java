@@ -21,7 +21,7 @@ import IODades.DataSource;
 public class JDomVideoGame implements DataSource {
 	protected SAXBuilder builder ; //Classe per crear un document JDOM
 	protected Document document; // classe que representa el document
-	protected Element rootNode, node, nodelista; // node arrel
+	protected Element rootNode, node; // node arrel
 	protected List subnodes; // llista de subnodes
 	protected XMLOutputter jdomToXML;
 	@Override
@@ -60,13 +60,7 @@ public class JDomVideoGame implements DataSource {
 			 ((VideoGames) dades.get(i)).setPEGI(Integer.valueOf(node.getChildText("PEGI")));
 			 ((VideoGames) dades.get(i)).setMaxplayers(Integer.valueOf(node.getChildText("maximosJugadores")));
 			 ((VideoGames) dades.get(i)).setEdition(node.getChildText("Edicion"));
-			 for(int j=0;j<longitud;j++){
-				 
-				 Plataformas[j] = node.getChildText("Plataforma");
-				 
-			 }
-			 ((VideoGames) dades.get(i)).setPlataforms(Plataformas);
-			
+			 ((VideoGames) dades.get(i)).setPlataforms(node.getChildText("Plataformas"));			
 			 } 
 			} catch (JDOMException ex){
 				error = -31;
@@ -99,12 +93,7 @@ public class JDomVideoGame implements DataSource {
 			 node.addContent(new Element ("PEGI").setText(String.valueOf(((VideoGames) dades.get(i)).getPEGI())));
 			 node.addContent(new Element ("maximosJugadores").setText(String.valueOf(((VideoGames) dades.get(i)).getMaxplayers())));
 			 node.addContent(new Element ("Edicion").setText(((VideoGames)dades.get(i)).getEdition()));
-			 nodelista = new Element("Plataformas");
-			 for(int j=0;j<((VideoGames) dades.get(i)).getPlataforms().length;j++){
-				 String[] plataformas = ((VideoGames) dades.get(i)).getPlataforms();
-				 nodelista.addContent("plataforma").setText(plataformas[j]);
-			 }
-			 node.addContent(nodelista);
+			 node.addContent(new Element ("Plataformas").setText(((VideoGames)dades.get(i)).getPlataforms()));
 			 rootNode.addContent(node);
 			 
 			 }

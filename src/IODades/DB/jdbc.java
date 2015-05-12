@@ -1,10 +1,16 @@
 package IODades.DB;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
+
+import CommercialGood.Products.VideoGames;
 
 public class jdbc implements DataStore{
 	protected Connection connect;
@@ -26,12 +32,14 @@ public class jdbc implements DataStore{
 		else{
 			query = "SELECT "+seleccion+" FROM "+tabla+" WHERE "+where+" = '"+valor+"'";
 		}
+		
 		try {
 			statement = connect.createStatement();
 			resultado = statement.executeQuery(query);
-			while(resultado.next()){
+			System.out.println(query);
+			/*while(resultado.next()){
 				System.out.println(resultado.getInt("code")+" "+resultado.getString(2));
-			}
+			}*/
 		} catch (SQLException e) {
 			error = -1;
 		}
@@ -151,34 +159,12 @@ public class jdbc implements DataStore{
 	}
 	@Override
 	public int importdades(ArrayList dades, String source) {
-		//extraigo los datos para realizar la consulta
-		String[] datos_consulta = source.split("@");
-		String[] campos = datos_consulta[0].split(";");
-		String tabla = datos_consulta[1];
-		String[] where = datos_consulta[2].split(";");
-		
-		//realizo la consulta
-		int error = Select(tabla, campos, where[0], where[1]);
-		
-		if(error == 0){
-		    ResultSetMetaData meta;
-		    
-			try {
-				meta = resultado.getMetaData();
-				int numColumns = meta.getColumnCount();
-				for(int i = 0; i< numColumns; i++){
-					int type = meta.getColumnType(i);
-				}
-			} catch (SQLException e) {
-				error = -1;
-			}	    		    
-		}
-		return error;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	@Override
 	public int exportdades(ArrayList dades, String source, int mode) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 }
