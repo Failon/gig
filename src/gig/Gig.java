@@ -28,38 +28,34 @@ public class Gig {
     	prueba.setUser("root");
     	prueba.setPassword("");
     	prueba.setDatabase("gig");
-    	prueba.setConnect();
+    	prueba.open("gig", 0);
     	String[] campos = {"code", "name", "description"};
     	String[] values = {"4", "fifa", "juego de futbol"};
     	ArrayList<VideoGames> VideoArray = new ArrayList<VideoGames>();
     	VideoGames juego = new VideoGames();
+    	juego.setName("Batman Arkham city");
+    	juego.setCategory("Arcade");
+    	juego.setPEGI(14);
+    	juego.setEdition("Collection");
+    	juego.setIndexRating(5);
+    	juego.setInternalComments("wapo wapo");
     	VideoArray.add(juego);
-    	String query = "edition;name@videogames@code;1";
+    	//Insert
+    	int error = prueba.exportdades(VideoArray, "videogames", 1);
+    	System.out.println(error);
     	
-    	int error = prueba.importdades(VideoArray, query);
-    	System.out.println(error);
-    	/*int error = prueba.Select("videogames", campos, "code", "2");
-    	System.out.println(error);
-    	System.out.println("-------");
-    	error = prueba.Insert("videogames", campos, values);
-    	System.out.println(error);
-    	error = prueba.Update("videogames", campos, values, "code", "2");
-    	System.out.println(error);
-    	System.out.println("-------");
-    	int error = prueba.Select("videogames", campos, "code", "4");
-    	System.out.println(error);
-    	System.out.println("-------");
-    	int error = prueba.Select("videogames", campos, null , "4");
-    	System.out.println(error);
-    	System.out.println("-------");
-    	/*
-    	error = prueba.Delete("videogames", "code", "4");
-    	System.out.println(error);
-    	System.out.println("-------");
-    	error = prueba.Select("videogames", campos, "code", "4");
-    	System.out.println(error);
-    	System.out.println("-------");*/
     	
+    	/*Seleccion
+    	String query = "code;price;PEGI;edition;name@videogames@code;1";
+    	
+    	 error = prueba.importdades(VideoArray, query);
+    	System.out.println(error);
+    	System.out.println(VideoArray.get(0).getEdition());
+    	System.out.println(VideoArray.get(0).getPrice());
+    	System.out.println(VideoArray.get(0).getPEGI());
+    	System.out.println(VideoArray.get(0).getName());
+    	error = prueba.close("gig");
+    	System.out.println(error);*/
     }
     
 }

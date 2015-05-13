@@ -1,12 +1,11 @@
 package IODades.DB.JDBCAdapters;
 import IODades.DB.jdbc;
+import Operations.Order;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.DriverManager;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 
 
@@ -20,9 +19,19 @@ public class gigmysql extends jdbc{
 		error = setConnect();
 		return error;
 	}
+	@Override
+	public int close(String source){
+		int error = 0;
+		try {
+			connect.close();
+		} catch (SQLException e) {
+			error = -1;
+		}
+		return error;
+	}
 	
 	@Override
-	public int setConnect() {
+	protected int setConnect() {
 		setUrl();
 		try {
 			this.connect = DriverManager.getConnection(this.url, this.user, this.password);
@@ -39,149 +48,91 @@ public class gigmysql extends jdbc{
 		this.url = "jdbc:"+this.driver+"://"+this.host+"/"+this.database;
 	}
 	@Override
-	public int importdades(ArrayList dades, String source) {
-		//extraigo los datos para realizar la consulta
-		String[] datos_consulta = source.split("@");
-		String[] campos = datos_consulta[0].split(";");
-		String tabla = datos_consulta[1];
-		String[] where = datos_consulta[2].split(";");
-		//preparo el objeto del array list.
-		Object obj = dades.get(0);
-		//realizo la consulta
-		int error = Select(tabla, campos, where[0], where[1]);
-		//si la seleccion se ha resultado con exito
-		if(error == 0){
-			try {
-				while(resultado.next()){//iteramos el resultset
-					
-					ResultSetMetaData meta = resultado.getMetaData();//caputramos la metadata de la tabla(numero de columnas, nombres de las columnas, tipo de datos de las columnas etc)
-					int numColumns = meta.getColumnCount();//numero de columnas
-					for(int i = 1; i<= numColumns; i++){//bucle para recorrer las columnas
-						int type = meta.getColumnType(i);//capturamos el tipo
-						String column = meta.getColumnName(i);//capturamos el nombre
-						String method_name = "set"+column.substring(0,1).toUpperCase()+column.substring(1);//perparo el nombre del setter.
-						if(type == Types.VARCHAR || type == Types.CHAR){//si es char o Varchar
-							Method method; //declaro el metodo
-							try {
-								
-								  method = obj.getClass().getMethod(method_name, String.class); //metodo de la clase del objeto pasado en el Arratlist
-								  System.out.println(method);
-								  method.invoke(obj, resultado.getString(i));//invoco el setter del objeto con el correspondiente valor del resultset
-								} catch (SecurityException e) {
-								  error = -3;//error de seguridad
-								} catch (NoSuchMethodException e) {
-								  error = -4;//metodo no encontrado
-								} catch (IllegalAccessException e) {
-									error = -5;//acceso al metodo no posible
-								} catch (IllegalArgumentException e) {
-									error = -6;//argumento incorrecto
-								} catch (InvocationTargetException e) {
-									error = -7;//error de invocacion
-								}
-						}
-						if(type == Types.DATE){//para tipo fechas
-							java.lang.reflect.Method method;
-							try {
-								  method = obj.getClass().getMethod(method_name);
-								  method.invoke(obj, resultado.getDate(i));
-								} catch (SecurityException e) {
-								  error = -3;
-								} catch (NoSuchMethodException e) {
-								  error = -4;
-								} catch (IllegalAccessException e) {
-									error = -5;
-								} catch (IllegalArgumentException e) {
-									error = -6;
-								} catch (InvocationTargetException e) {
-									error = -7;
-								}
-						}
-						if(type == Types.FLOAT){//para tipo float
-							java.lang.reflect.Method method;
-							try {
-								  method = obj.getClass().getMethod(method_name);
-								  method.invoke(obj, resultado.getFloat(i));
-								} catch (SecurityException e) {
-								  error = -3;
-								} catch (NoSuchMethodException e) {
-								  error = -4;
-								} catch (IllegalAccessException e) {
-									error = -5;
-								} catch (IllegalArgumentException e) {
-									error = -6;
-								} catch (InvocationTargetException e) {
-									error = -7;
-								}
-						}
-						if(type == Types.NUMERIC){//para enteros
-							java.lang.reflect.Method method;
-							try {
-								  method = obj.getClass().getMethod(method_name);
-								  method.invoke(obj, resultado.getInt(i));
-								} catch (SecurityException e) {
-								  error = -3;
-								} catch (NoSuchMethodException e) {
-								  error = -4;
-								} catch (IllegalAccessException e) {
-									error = -5;
-								} catch (IllegalArgumentException e) {
-									error = -6;
-								} catch (InvocationTargetException e) {
-									error = -7;
-								}
-						}
-					}
-				}
-			} catch (SQLException e) {//excepcion sql
-				error = -1;
-			}	    		    
-		}
-		return error;//devuelvo el tipo de error
-	}
-	@Override
 	public int exportdades(ArrayList dades, String source, int mode) {
-		int error = 0;
-		Object obj = dades.get(0);
-		Method[] method = obj.getClass().getDeclaredMethods();
-		String[] campos = new String[method.length];
-		String[] values = new String[method.length];
+		int error = 0; //codigo de error;
+		Object obj = dades.get(0); //objeto en el arraylist
+		Method[] method = obj.getClass().getMethods(); //array con los metodos
+		String[] campos; //campos para las consultas sql (redimensionados)
+		String[] campos_test = new String[method.length]; //candidatos de campos (sin dimension adecuada)
+		String[] campo_aux = new String[1]; //campo para el testdrive
+		String[] values;//values para las consultas sql (redimensionados)
+		String[] values_test = new String[method.length]; //candidatos de valores (sin dimension adecuada)
+		String[] line; // array para los campos de los detalles de orderdetail
+		int sizeDetalle; //numero de lineas de detalles
+		int k; //variable que dimensionará los arrays de campos y values.
+		int testdrive; //codigo de error que determina si un campo existe en la base de datos
+		
 		switch(mode){
 		case 1: //insert
-
-			 for(int i = 0, k=0; i < method.length; i++){
-				 String metodo_nombre = method[i].toString();
-				 if(metodo_nombre.substring(0, 3)=="get"){
-					 campos[k] = (metodo_nombre.substring(3)).toLowerCase();
-
-					 try {
-						Object invocado = method[i].invoke(obj).toString();
-						values[k] = invocado.toString();
-					} catch (IllegalAccessException e) {
-						error = -4;
-					} catch (IllegalArgumentException e) {
-						error = -5;
-					} catch (InvocationTargetException e) {
-						error = -6;
-					}
-					k++;
+			k=0; //contador a 0
+			 for(int i = 0; i < method.length; i++){ //recorremos el array de metodos
+				 String metodo_nombre = method[i].getName(); //capturamos el nombre del metodo
+				 if(metodo_nombre.substring(0, 3).equals("get")){ //si empieza por get
+					 campos_test[k] = (metodo_nombre.substring(3)).toLowerCase(); //guardamos el candidato del nombre del campo en minusculas
+					 campo_aux[0] = campos_test[k]; //preparamos el campo para el test drive
+					 testdrive = Select(source, campo_aux, null, null);
+					 System.out.println(testdrive);
+					if(testdrive == 0){
+						try {
+							Object invocado = method[i].invoke(obj); //llamamos al get y guardamos su valor como objeto
+							values_test[k] = invocado.toString(); //pasamos el contenido a string
+							k++; //subimos el contador (como se observa solo se guardan los casos en que exista el campo en la bd y además si y solo si el metodo devuelve algo, así acotamos los casos en caso de que el objeto esté parcialmente vacio.
+							System.out.println(invocado.getClass().getName());
+						} catch (IllegalAccessException e) {
+							error = -4;
+						} catch (IllegalArgumentException e) {
+							error = -5;
+						} catch (InvocationTargetException e) {
+							error = -6;
+						} catch (NullPointerException e){
+							error = -10;
+						}
+					}				
 				 }
 			 }
-			 			
-			//llamamos a insert.
-			error = Insert(source, campos, values);
+			 if(k>0){ //si se ha guardado algun campo y valor
+				 campos = new String[k]; //dimensionamos el array de campos
+				 values = new String[k]; //dimensionamos el array de values
+				 for(int i = 0; i < k; i++){
+					 campos[i] = campos_test[i]; //los llenamos con los campos de los tests
+					 values[i] = values_test[i]; //los llenamos con los valores de los tests
+				 }
+				//llamamos a insert.	
+				 error = Insert(source, campos, values);
+			 }else{
+				error = -7; //si ningun campo era candidato
+			 }
+			 if(error > -7 && source == "orders" && obj.getClass().getName()=="Order"){ //si ha habido Insert y la tabla era orders y el objeto era Order
+				 source = "ordersdetails"; //revisar nombre de tabla
+				 sizeDetalle = ((Order) obj).numLines(); //capturamos el numero de detalles que tiene el Order
+				 campos = new String[5]; //dimensiono el array de campos y posteriormente asigno los nombres de los estos
+				 campos[0] = "receivedunits";
+				 campos[1] = "price";
+				 campos[2] = "details";
+				 campos[3] = "amount";
+				 campos[4] = "code";
+				 for(int i = 0; i < sizeDetalle; i++){ //bucle para realizar los inserts en la tabla de detalles.
+					 line = ((Order)obj).getLine(i).split(";"); //capturo el array de valores
+					 if(line.length > 1){// get Line devuelve el string "error" si falla que daría lugar a un array de una posicion, discrimino este caso y ejecuto el insert solo si ha capturado valores.
+						 error = Insert(source, campos, line); //LLamo a Insert.
+					 }					 
+				 }				 
+			 }		 					
 			
 		break;
 		case 2: //Update
 			String[] datos_query = source.split("@");
 			String tabla = datos_query[0];
 			String[] condicion = datos_query[1].split(";");
-			 for(int i = 0, k=0; i < method.length; i++){
-				 String metodo_nombre = method[i].toString();
+			k=0;
+			 for(int i = 0; i < method.length; i++){
+				 String metodo_nombre = method[i].getName();
 				 if(metodo_nombre.substring(0, 3)=="get"){
-					 campos[k] = metodo_nombre.substring(3);
+					 campos_test[k] = (metodo_nombre.substring(3)).toLowerCase();
+					 campo_aux[0] = campos_test[k];
 					 try {
-						Object invocado = method[i].invoke(obj).toString();
-						values[k] = invocado.toString();
+						Object invocado = method[i].invoke(obj);
+						values_test[k] = invocado.toString();
 					} catch (IllegalAccessException e) {
 						error = -4;
 					} catch (IllegalArgumentException e) {
@@ -189,25 +140,57 @@ public class gigmysql extends jdbc{
 					} catch (InvocationTargetException e) {
 						error = -6;
 					}
-					k++;
+					 testdrive = Select(source, campo_aux, null, null);
+					 if(testdrive == 0){
+						k++;
+					 }				
 				 }
 			 }
-			 			
-			//llamamos a insert.
-			error = Update(tabla, campos, values, condicion[0], condicion[1]);	
+			 if(k>0){
+				 campos = new String[k];
+				 values = new String[k];
+				 for(int i = 0; i < k; i++){
+					 campos[i] = campos_test[i];
+					 values[i] = values_test[i];
+				 }
+				//llamamos a Update.
+				 error = Update(tabla, campos, values, condicion[0], condicion[1]);
+			 }else{
+				 error = -7;
+			 }
+			 if(error > -7 && source == "orders" && obj.getClass().getName()=="Order"){
+				 source = "ordersdetails"; //revisar nombre de tabla.
+				 sizeDetalle = ((Order) obj).numLines();
+				 campos = new String[5];
+				 campos[0] = "receivedunits";
+				 campos[1] = "price";
+				 campos[2] = "details";
+				 campos[3] = "amount";
+				 campos[4] = "code";
+				 for(int i = 0; i < sizeDetalle; i++){
+					 line = ((Order)obj).getLine(i).split(";");
+					 error = Update(source, campos, line, campos[4], line[4]);
+				 }				 
+			 }	
+			
+			
 		break;
 		case 3: //Delete
 			String[] datosquery = source.split("@");//extraigo la informacion
 			String table = datosquery[0];//tabla
 			String[] where = datosquery[1].split(";");//where.
 			
-			Delete(table, where[0], where[1]);
+			error = Delete(table, where[0], where[1]);
+			if(table == "Orders"){//si la tabla era de Orders
+				table = "OrdersDetail"; //revisar nombre
+				error = Delete(table, "order", where[1]); //borramos los detalles que fueran de ese Order.
+			}
 		break;
 		default:
+			error = -8; //operacion incorrecta.
 		break;
 		}
 		return error;
 	}
 	
 }
-
